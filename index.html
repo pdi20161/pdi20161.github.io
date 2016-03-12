@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.4">
-<title>DCA0201: Paradigmas de programação</title>
+<title>DCA0445: Processamento Digital de Imagens (Resolução de Exercícios)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -482,106 +482,99 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
-<h1>DCA0201: Paradigmas de programação</h1>
+<h1>DCA0445: Processamento Digital de Imagens (Resolução de Exercícios)</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Sumário</div>
+<ul class="sectlevel1">
+<li><a href="#_1_exercícios_da_unidade_1">1. Exercícios da Unidade 1</a>
+<ul class="sectlevel2">
+<li><a href="#_1_1_questão_1">1.1 Questão 1</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Agostinho Brito &lt;<a href="mailto:agostinhobritojr@gmail.com">agostinhobritojr@gmail.com</a>&gt;</p>
+<p>Exercícios disponíveis <a href="http://agostinhobritojr.github.io/tutoriais/pdi/">aqui</a>.</p>
+</div>
+<div class="paragraph">
+<p>Leandro Albino &lt;<a href="mailto:leandroalbinof@gmail.com">leandroalbinof@gmail.com</a>&gt;<br>
+Maykon Ricardo &lt;<a href="mailto:ricardo.maykon@gmail.com">ricardo.maykon@gmail.com</a>&gt;</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_ementa">Ementa</h2>
+<h2 id="_1_exercícios_da_unidade_1">1. Exercícios da Unidade 1</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_1_questão_1">1.1 Questão 1</h3>
 <div class="paragraph">
-<p>Aqui vem um texto normal</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>lista de nivel 1</p>
-</li>
-<li>
-<p>lista de nivel 1</p>
-<div class="ulist">
-<ul>
-<li>
-<p>lista de nivel 2</p>
-</li>
-<li>
-<p>lista de nivel 2</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>lista de nivel 1</p>
-</li>
-</ul>
+<p>Inicialmente o programa <a href="codigos/regions.cpp">regions.cpp</a>, mostrado na <a href="#exa_regions">Listagem 1</a>,
+solicita ao usuário duas coordenadas (x y) referentes aos pontos P1 e P2 localizados dentro
+dos limites do tamanho da imagem. Em seguida é feito dois for&#8217;s para percorrer as colunas (x) e
+linhas (y) dentro da região definida pelo retângulo de vértices opostos formado por P1 e P2 e
+, dentro desse loop, é feito o negativo da imagem que consiste na diferença entre o tom 255
+e o tom específico do pixel em questão.</p>
 </div>
 <div class="paragraph">
-<p>Link github (<a href="http://github.com/agostinhobritojr/dca0201">http://github.com/agostinhobritojr/dca0201</a>)</p>
+<p>A saída do programa <em>regions</em>, para entradas (20 40) e (100 150), é mostrado na <a href="#fig_regions">Figura 1</a>.</p>
 </div>
-<div class="paragraph">
-<p>A saída do programa <em>hello</em> é mostrado na Figura <a href="#fig_hello">Hello</a></p>
-</div>
-<div id="fig_hello" class="imageblock">
+<div id="fig_regions" class="imageblock">
 <div class="content">
-<img src="biel.png" alt="Saida do programa hello">
+<img src="imagens/regions_saida.png" alt="Saida do programa regions">
 </div>
-<div class="title">Figure 1. Saída do programa hello</div>
+<div class="title">Figure 1. Saída do programa regions</div>
 </div>
-<div class="paragraph">
-<p>Aqui vem a listagem do programa <a href="hello.cpp" class="bare">hello.cpp</a> , mostrada
-Listagem <a href="#exa_hello">Hello</a>, cuja única funcionalidade apresentar na tela
-uma imagem fornecida via linha de comando.</p>
-</div>
-<div id="exa_hello" class="listingblock">
-<div class="title">hello.cpp</div>
+<div id="exa_regions" class="listingblock">
+<div class="title">Listagem 1 : regions.cpp</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span class="tok-cp">#include &lt;iostream&gt;</span>
 <span class="tok-cp">#include &lt;cv.h&gt;</span>
 <span class="tok-cp">#include &lt;highgui.h&gt;</span>
 
 <span class="tok-k">using</span> <span class="tok-k">namespace</span> <span class="tok-n">cv</span><span class="tok-p">;</span>
+<span class="tok-k">using</span> <span class="tok-k">namespace</span> <span class="tok-n">std</span><span class="tok-p">;</span>
 
-<span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">argc</span><span class="tok-p">,</span> <span class="tok-kt">char</span><span class="tok-o">**</span> <span class="tok-n">argv</span><span class="tok-p">){</span>
+<span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-p">,</span> <span class="tok-kt">char</span><span class="tok-o">**</span><span class="tok-p">){</span>
   <span class="tok-n">Mat</span> <span class="tok-n">image</span><span class="tok-p">;</span>
-  <span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-n">argv</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">],</span><span class="tok-n">CV_LOAD_IMAGE_GRAYSCALE</span><span class="tok-p">);</span>
-  <span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">);</span>
+  <span class="tok-kt">int</span> <span class="tok-n">p1x</span><span class="tok-p">,</span> <span class="tok-n">p1y</span><span class="tok-p">,</span> <span class="tok-n">p2x</span><span class="tok-p">,</span> <span class="tok-n">p2y</span><span class="tok-p">;</span>
+
+  <span class="tok-n">cout</span> <span class="tok-o">&lt;&lt;</span> <span class="tok-s">&quot;Entre com as coordenadas (x y) do ponto 1: &quot;</span><span class="tok-p">;</span>
+  <span class="tok-n">cin</span> <span class="tok-o">&gt;&gt;</span> <span class="tok-n">p1x</span> <span class="tok-o">&gt;&gt;</span> <span class="tok-n">p1y</span><span class="tok-p">;</span>
+
+  <span class="tok-n">cout</span> <span class="tok-o">&lt;&lt;</span> <span class="tok-s">&quot;Entre com as coordenadas (x y) do ponto 2: &quot;</span><span class="tok-p">;</span>
+  <span class="tok-n">cin</span> <span class="tok-o">&gt;&gt;</span> <span class="tok-n">p2x</span> <span class="tok-o">&gt;&gt;</span> <span class="tok-n">p2y</span><span class="tok-p">;</span>
+
+  <span class="tok-n">image</span><span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s">&quot;biel.png&quot;</span><span class="tok-p">,</span><span class="tok-n">CV_LOAD_IMAGE_GRAYSCALE</span><span class="tok-p">);</span>
+  <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-n">data</span><span class="tok-p">)</span>
+    <span class="tok-n">cout</span> <span class="tok-o">&lt;&lt;</span> <span class="tok-s">&quot;nao abriu biel.png&quot;</span> <span class="tok-o">&lt;&lt;</span> <span class="tok-n">endl</span><span class="tok-p">;</span>
+
+  <span class="tok-n">namedWindow</span><span class="tok-p">(</span><span class="tok-s">&quot;janela&quot;</span><span class="tok-p">,</span><span class="tok-n">WINDOW_AUTOSIZE</span><span class="tok-p">);</span>
+
+  <span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">i</span><span class="tok-o">=</span><span class="tok-n">p1x</span><span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">&lt;</span><span class="tok-n">p2x</span><span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">++</span><span class="tok-p">){</span>
+    <span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">j</span><span class="tok-o">=</span><span class="tok-n">p1y</span><span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">&lt;</span><span class="tok-n">p2y</span><span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">++</span><span class="tok-p">){</span>
+      <span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-n">uchar</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">)</span> <span class="tok-o">=</span> <span class="tok-mi">255</span> <span class="tok-o">-</span> <span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-n">uchar</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">);</span>
+    <span class="tok-p">}</span>
+  <span class="tok-p">}</span>
+
+  <span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s">&quot;janela&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">);</span>
   <span class="tok-n">waitKey</span><span class="tok-p">();</span>
   <span class="tok-k">return</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Podem ser inseridas equações como \$\int_a^b f(x) dx\$</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_bibliografia">Bibliografia</h2>
-<div class="sectionbody">
-<div class="ulist bibliography">
-<ul class="bibliography">
-<li>
-<p>Stephen Prata. 'C++ Primer Plus'. Addison-Wesley. 1990. 2 ed.</p>
-</li>
-<li>
-<p><a href="http://www.cplusplus.com" class="bare">http://www.cplusplus.com</a>. 'Principal portal de desenvolvimento e referência para programação em C++'.</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-11 11:42:48 BRT
+Last updated 2016-03-12 10:40:21 BRT
 </div>
 </div>
 <script type="text/x-mathjax-config">
