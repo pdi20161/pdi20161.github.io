@@ -1,13 +1,19 @@
 #include <iostream>
 #include <cv.h>
 #include <highgui.h>
+#include <iostream>     // std::cout
+#include <algorithm>    // std::shuffle
+#include <array>        // std::array
+#include <random>
+#include <chrono>
 
 using namespace cv;
 using namespace std;
 
 int main(int argc, char** argv){
   Mat image, newimage;
-  int p1i,p1j,p2i,p2j;
+  Rect alea[4];
+  int p1i,p1j,p2i,p2j, aleint[4],i=0;
   Vec3b val;
   int width, height;
 
@@ -24,23 +30,29 @@ int main(int argc, char** argv){
   Mat imgRect4(image, Rect(width/2-1,height/2-1,height/2,width/2));
   newimage = image.clone();
 
-  
+  alea[0]=Rect(width/2,0,height/2,width/2);
+  alea[1]=Rect(width/2,height/2,height/2,width/2);
+  alea[2]=Rect(0,height/2,height/2,width/2);
+  alea[3]=Rect(0,0,height/2,width/2);
 
-  imgRect1.copyTo(newimage(Rect(width/2,0,imgRect1.size().height,imgRect1.size().width)));
-  imgRect2.copyTo(newimage(Rect(width/2,height/2,imgRect2.size().height,imgRect2.size().width)));
-  imgRect3.copyTo(newimage(Rect(0,height/2,imgRect3.size().height,imgRect3.size().width)));
-  imgRect4.copyTo(newimage(Rect(0,0,imgRect4.size().height,imgRect4.size().width)));
-  // imgRect2.copyTo(image);
-  namedWindow("Original",WINDOW_AUTOSIZE);
-  imshow("Original", image);
-  namedWindow("rect1",WINDOW_AUTOSIZE);
-  imshow("rect1", imgRect1);
-  namedWindow("rect2",WINDOW_AUTOSIZE);
-  imshow("rect2", imgRect2);
-  namedWindow("rect3",WINDOW_AUTOSIZE);
-  imshow("rect3", imgRect3);
-  namedWindow("rect4",WINDOW_AUTOSIZE);
-  imshow("rect4", imgRect4);
+  std::array<int,4> foo {0,1,2,3};
+
+  // obtain a time-based seed:
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+  shuffle (foo.begin(), foo.end(), std::default_random_engine(seed));
+
+  std::cout << "shuffled elements:";
+  for (int& x: foo){
+    aleint[i] = x;
+    i++;
+  }
+
+    imgRect1.copyTo(newimage(alea[aleint[0]]));
+    imgRect2.copyTo(newimage(alea[aleint[1]]));
+    imgRect3.copyTo(newimage(alea[aleint[2]]));
+    imgRect4.copyTo(newimage(alea[aleint[3]]));
+    
   namedWindow("Saida",WINDOW_AUTOSIZE);
   imshow("Saida", newimage);
   waitKey();
