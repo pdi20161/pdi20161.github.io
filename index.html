@@ -576,13 +576,15 @@ e o tom específico do pixel em questão.</p>
 </div>
 <div class="sect2">
 <h3 id="_1_2_questão_2">1.2 Questão 2</h3>
+<div class="paragraph">
+<p>No programa abaixo foi gerado um vetor com quatro elementos do tipo Rect, onde foi armazenado os pontos iniciais e comprimento e largura de cada retângulo onde as imagens serão inseridas na imagem original. Em seguida dividimos a imagem em quatro partes usando o construtor da classe Mat, depois de capturada as imagens sorteamos aleatoriamente o valor do vetor Rect e adicionamos na nova imagem usando o copyTo.</p>
+</div>
 <div class="listingblock">
 <div class="title">Listagem 2 : trocaregioes.cpp</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span class="tok-cp">#include &lt;iostream&gt;</span>
 <span class="tok-cp">#include &lt;cv.h&gt;</span>
 <span class="tok-cp">#include &lt;highgui.h&gt;</span>
-<span class="tok-cp">#include &lt;iostream&gt;     </span><span class="tok-c1">// std::cout</span>
 <span class="tok-cp">#include &lt;algorithm&gt;    </span><span class="tok-c1">// std::shuffle</span>
 <span class="tok-cp">#include &lt;array&gt;        </span><span class="tok-c1">// std::array</span>
 <span class="tok-cp">#include &lt;random&gt;</span>
@@ -648,6 +650,9 @@ e o tom específico do pixel em questão.</p>
 </div>
 <div class="sect2">
 <h3 id="_1_4_questão_4">1.4 Questão 4</h3>
+<div class="paragraph">
+<p>Inicialmente foi inserido uma borda na cor "255" com objetivo de conectar as bolhas localizadas nos limites da imagem, com isso usamos o floodfill para remover essas bolhas agora conectadas. Em seguida rotulamos o fundo da imagem igual a "1" e as bolhas com rotulos a partir de "2", depois de rotulado todas as bolhas verificamos se ainda existe algum fundo com a cor "0", caso exista, denominamos esse capo como um furo e apagamos o furo e a bolha a quem pertence esse furo, caso exista um furo mas não exista bolha ao redor o programa não contabilizara o furo.</p>
+</div>
 <div class="listingblock">
 <div class="title">Listagem 3 : labeling.cpp</div>
 <div class="content">
@@ -969,7 +974,7 @@ e o tom específico do pixel em questão.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-15 00:11:44 BRT
+Last updated 2016-03-16 15:03:21 BRT
 </div>
 </div>
 <script type="text/x-mathjax-config">
