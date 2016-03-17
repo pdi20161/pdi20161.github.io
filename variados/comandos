@@ -1,5 +1,4 @@
 sudo apt-get install git
-sudo gem install asciidoctor-pdf --pre
 
 git config --global user.name "pdi20161"
 git config --global user.email pdi2016.1@gmail.com
@@ -14,19 +13,25 @@ git remote add origin git@github.com:pdi20161/teste.git | git remote add origin 
 git push -u origin master
 git pull
 
-Asciidoctor <asciidoc_file>.asc no terminal
+Para remover os arquivos deletados que antes haviam sido versionados, executar:
+git ls-files --deleted | xargs git rm
+git add .
+git commit
 
-sudo add-apt-repository ppa:webupd8team/atom
-sudo apt-get update
-sudo apt-get install atom
-control +shift + a no atom
+-------------------------------------------------------
 
-
+sudo gem install asciidoctor-pdf --pre
 sudo apt-get -y install libssl-dev
 sudo apt-get install ruby-full
 sudo gem install pygments.rb
 
 ssh-keygen -t rsa 
 
+Asciidoctor <asciidoc_file>.asc no terminal
 
+-------------------------------------------------------
 
+sudo add-apt-repository ppa:webupd8team/atom
+sudo apt-get update
+sudo apt-get install atom
+control +shift + a no atom
