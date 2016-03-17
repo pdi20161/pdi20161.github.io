@@ -12,8 +12,7 @@ using namespace std;
 int main(int argc, char** argv){
   Mat image, newimage;
   Rect alea[4];
-  int p1i,p1j,p2i,p2j, aleint[4],i=0;
-  Vec3b val;
+  int aleint[4],i=0;
   int width, height;
 
   image= imread(argv[1],CV_LOAD_IMAGE_GRAYSCALE);
@@ -51,7 +50,7 @@ int main(int argc, char** argv){
     imgRect2.copyTo(newimage(alea[aleint[1]]));
     imgRect3.copyTo(newimage(alea[aleint[2]]));
     imgRect4.copyTo(newimage(alea[aleint[3]]));
-    
+
   namedWindow("Saida",WINDOW_AUTOSIZE);
   imshow("Saida", newimage);
   waitKey();

@@ -18,6 +18,10 @@ git ls-files --deleted | xargs git rm
 git add .
 git commit
 
+Se você quiser jogar fora todas as alterações que você estiver trabalhando, há duas maneiras para se fazer isso:
+
+git checkout -f or git reset --hard
+
 -------------------------------------------------------
 
 sudo gem install asciidoctor-pdf --pre
@@ -25,7 +29,7 @@ sudo apt-get -y install libssl-dev
 sudo apt-get install ruby-full
 sudo gem install pygments.rb
 
-ssh-keygen -t rsa 
+ssh-keygen -t rsa
 
 Asciidoctor <asciidoc_file>.asc no terminal
 
