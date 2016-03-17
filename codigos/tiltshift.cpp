@@ -24,7 +24,23 @@ Mat original, desfocada, blended;
 Mat desf_cpy;
 
 char TrackbarName[50];
-
+Mat increase_colour_saturation(Mat image)
+{
+    vector<Mat> planes;
+    Mat hsv;
+    cvtColor(image, hsv, CV_BGR2HSV);
+    Vec3b val;
+    for(int i=0;i<hsv.rows;i++){
+      for(int j=0;j<hsv.cols;j++){
+        int v = hsv.at<Vec3b>(i,j)[1] + 20;
+        if(v>255) v= 255;
+      	else if(v<0) v= 0;
+          hsv.at<Vec3b>(i,j)[1] = v;
+      }
+    }
+    cvtColor(hsv, image, CV_HSV2BGR);
+    return image;
+}
 void on_trackbar_blend(int, void*){
  alfa = (double) alfa_slider/alfa_slider_max ;
  addWeighted(desf_cpy , alfa, original, 1-alfa, 0.0, blended);
@@ -38,13 +54,13 @@ int limit_v = vertical_slider;
   if(limit_v > 0 && limit_c > 0 && limit_c/2+limit_v<=height && (height-limit_c)/2-(height/2-limit_v)>=0){
     if(limit_v <=height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c));
-
+      
   	  tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c)));
 
     }
     else if(limit_v > height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2+(limit_v-height/2),width,limit_c));
-
+      
   	  tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2+(limit_v-height/2),width,limit_c)));
     }
       on_trackbar_blend(alfa_slider,0);
@@ -59,7 +75,7 @@ void on_trackbar_center(int, void*){
   if(limit_c > 0 && limit_v > 0 && limit_c/2+limit_v<=height && (height-limit_c)/2-(height/2-limit_v)>=0){
     if(limit_v <= height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c));
-      
+
       tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c)));
 
     }
@@ -86,6 +102,7 @@ int main(int argvc, char** argv){
   desfocada.copyTo(desf_cpy);
   width = original.size().width;
   height = original.size().height;
+  original = increase_colour_saturation(original);
   vertical_slider = height/2;
   vertical_slider_max = height;
   center_slider = 0;
