@@ -10,6 +10,10 @@ int alfa_slider_max = 100;
 
 int width, height;
 
+float gauss[] = {1,2,1,
+                 2,4,2,
+                 1,2,1};
+
 int center_slider;
 int center_slider_max ;
 
@@ -23,7 +27,7 @@ char TrackbarName[50];
 
 void on_trackbar_blend(int, void*){
  alfa = (double) alfa_slider/alfa_slider_max ;
- addWeighted( original, alfa, desf_cpy, 1-alfa, 0.0, blended);
+ addWeighted(desf_cpy , alfa, original, 1-alfa, 0.0, blended);
  imshow("addweighted", blended);
 }
 
@@ -34,14 +38,14 @@ int limit_v = vertical_slider;
   if(limit_v > 0 && limit_c > 0 && limit_c/2+limit_v<=height && (height-limit_c)/2-(height/2-limit_v)>=0){
     if(limit_v <=height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c));
+
   	  tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c)));
-      cout<<(height-limit_c)/2-(height/2-limit_v)<<"\n";
 
     }
     else if(limit_v > height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2+(limit_v-height/2),width,limit_c));
+
   	  tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2+(limit_v-height/2),width,limit_c)));
-      cout<<limit_c<<" "<<limit_v<<"\n";
     }
       on_trackbar_blend(alfa_slider,0);
   }
@@ -55,24 +59,30 @@ void on_trackbar_center(int, void*){
   if(limit_c > 0 && limit_v > 0 && limit_c/2+limit_v<=height && (height-limit_c)/2-(height/2-limit_v)>=0){
     if(limit_v <= height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c));
-      cout<<(height-limit_c)/2-(height/2-limit_v)<<"\n";
+      
       tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2-(height/2-limit_v),width,limit_c)));
-      cout<<limit_c<<" "<<limit_v<<"\n";
 
     }
     else if(limit_v > height/2){
       Mat tmp = original(Rect(0, (height-limit_c)/2+(limit_v-height/2),width,limit_c));
+
       tmp.copyTo(desf_cpy(Rect(0, (height-limit_c)/2+(limit_v-height/2),width,limit_c)));
-      cout<<limit_c<<" "<<limit_v<<"\n";
     }
     on_trackbar_blend(alfa_slider,0);
   }
 
 }
 
+
 int main(int argvc, char** argv){
-  original = imread("blend1.jpg");
-  desfocada = imread("blend2.jpg");
+  Mat mask(3,3,CV_32F), mask1;
+  original = imread("tiltshift_entrada3.jpg");
+  mask = Mat(3, 3, CV_32F, gauss);
+  scaleAdd(mask, 1/16.0, Mat::zeros(3,3,CV_32F), mask1);
+  mask = mask1;
+  filter2D(original, desfocada, original.depth(), mask, Point(1,1), 0);
+  filter2D(desfocada, desfocada, desfocada.depth(), mask, Point(1,1), 0);
+  filter2D(desfocada, desfocada, desfocada.depth(), mask, Point(1,1), 0);
   desfocada.copyTo(desf_cpy);
   width = original.size().width;
   height = original.size().height;
@@ -104,5 +114,6 @@ int main(int argvc, char** argv){
   on_trackbar_vert(vertical_slider, 0 );
 
   waitKey(0);
+  imwrite("tiltshift_saida.png", blended);
   return 0;
 }
