@@ -97,7 +97,7 @@ int main(int argvc, char** argv){
   scaleAdd(mask, 1/16.0, Mat::zeros(3,3,CV_32F), mask1);
   mask = mask1;
   int cont = 0;
-  video_in.open("paisagem.mp4");
+  video_in.open("tiltshiftvideo_entrada.mp4");
 
   width = video_in.get(CV_CAP_PROP_FRAME_WIDTH);
   height = video_in.get(CV_CAP_PROP_FRAME_HEIGHT);
@@ -105,7 +105,7 @@ int main(int argvc, char** argv){
   vertical_slider_max = height;
   center_slider = height/2;
   center_slider_max = height;
-  VideoWriter video_out("out.avi",CV_FOURCC('M','J','P','G'),10,Size(width,height),true);
+  VideoWriter video_out("tiltshiftvideo_saida.avi",CV_FOURCC('M','J','P','G'),10,Size(width,height),true);
 
   namedWindow("tiltshiftvideo", 1);
 

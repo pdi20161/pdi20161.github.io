@@ -22,6 +22,9 @@ Se você quiser jogar fora todas as alterações que você estiver trabalhando, 
 
 git checkout -f or git reset --hard
 
+Para desfazer o ultimo commit sem ter dado o push
+git reset
+
 -------------------------------------------------------
 
 sudo gem install asciidoctor-pdf --pre
