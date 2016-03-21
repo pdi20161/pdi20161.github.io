@@ -1437,6 +1437,175 @@ a imagem é suavizada e com o laplassiano é destacado os contornos.</p>
 </div>
 <div class="sect2">
 <h3 id="_1_8_questão_8">1.8 Questão 8</h3>
+<div class="paragraph">
+<p>Primeiramente criamos a função <em>increaseColourSaturation</em> que irá regular a saturação da imagem.
+Fizemos isso transformando a imagem de RGB para HSV, depois dando um ganho em V e no final fizemos
+a transformação inversa para RGB.</p>
+</div>
+<div id="exa_tiltshift_parte1" class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-n">Mat</span> <span class="tok-nf">increase_colour_saturation</span><span class="tok-p">(</span><span class="tok-n">Mat</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-p">{</span>
+    <span class="tok-n">vector</span><span class="tok-o">&lt;</span><span class="tok-n">Mat</span><span class="tok-o">&gt;</span> <span class="tok-n">planes</span><span class="tok-p">;</span>
+    <span class="tok-n">Mat</span> <span class="tok-n">hsv</span><span class="tok-p">;</span>
+    <span class="tok-n">cvtColor</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,</span> <span class="tok-n">hsv</span><span class="tok-p">,</span> <span class="tok-n">CV_BGR2HSV</span><span class="tok-p">);</span>
+    <span class="tok-n">Vec3b</span> <span class="tok-n">val</span><span class="tok-p">;</span>
+    <span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">i</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">&lt;</span><span class="tok-n">hsv</span><span class="tok-p">.</span><span class="tok-n">rows</span><span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">++</span><span class="tok-p">){</span>
+      <span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">j</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">&lt;</span><span class="tok-n">hsv</span><span class="tok-p">.</span><span class="tok-n">cols</span><span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">++</span><span class="tok-p">){</span>
+        <span class="tok-kt">int</span> <span class="tok-n">v</span> <span class="tok-o">=</span> <span class="tok-n">hsv</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-n">Vec3b</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">)[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-mi">20</span><span class="tok-p">;</span>
+        <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">v</span><span class="tok-o">&gt;</span><span class="tok-mi">255</span><span class="tok-p">)</span> <span class="tok-n">v</span><span class="tok-o">=</span> <span class="tok-mi">255</span><span class="tok-p">;</span>
+      	<span class="tok-k">else</span> <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">v</span><span class="tok-o">&lt;</span><span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-n">v</span><span class="tok-o">=</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
+          <span class="tok-n">hsv</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-n">Vec3b</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">)[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">v</span><span class="tok-p">;</span>
+      <span class="tok-p">}</span>
+    <span class="tok-p">}</span>
+    <span class="tok-n">cvtColor</span><span class="tok-p">(</span><span class="tok-n">hsv</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">,</span> <span class="tok-n">CV_HSV2BGR</span><span class="tok-p">);</span>
+    <span class="tok-k">return</span> <span class="tok-n">image</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Não modificamos a função <em>onTrackbarBlend</em>. Esta será responsável pela regulagem do nível de desfoque
+da imagem através do parâmetro alfa.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-kt">void</span> <span class="tok-nf">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-p">,</span> <span class="tok-kt">void</span><span class="tok-o">*</span><span class="tok-p">){</span>
+ <span class="tok-n">alfa</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-p">)</span> <span class="tok-n">alfa_slider</span><span class="tok-o">/</span><span class="tok-n">alfa_slider_max</span> <span class="tok-p">;</span>
+ <span class="tok-n">addWeighted</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span> <span class="tok-p">,</span> <span class="tok-n">alfa</span><span class="tok-p">,</span> <span class="tok-n">original</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-o">-</span><span class="tok-n">alfa</span><span class="tok-p">,</span> <span class="tok-mf">0.0</span><span class="tok-p">,</span> <span class="tok-n">blended</span><span class="tok-p">);</span>
+ <span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s">&quot;addweighted&quot;</span><span class="tok-p">,</span> <span class="tok-n">blended</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Em seguida criamos a função <em>OnTrackbarVert</em>, esta é responsável pelo ajuste da altura da região
+central que entrará em foco.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-kt">void</span> <span class="tok-nf">on_trackbar_vert</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-p">,</span> <span class="tok-kt">void</span><span class="tok-o">*</span><span class="tok-p">){</span>
+  <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">);</span>
+<span class="tok-kt">int</span> <span class="tok-n">limit_v</span> <span class="tok-o">=</span> <span class="tok-n">vertical_slider</span><span class="tok-p">;</span>
+  <span class="tok-kt">int</span> <span class="tok-n">limit_c</span> <span class="tok-o">=</span> <span class="tok-n">center_slider</span><span class="tok-p">;</span>
+  <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-n">limit_v</span><span class="tok-o">&lt;=</span><span class="tok-n">height</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">)</span><span class="tok-o">&gt;=</span><span class="tok-mi">0</span><span class="tok-p">){</span>
+    <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&lt;=</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
+      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
+
+  	  <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
+
+    <span class="tok-p">}</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
+      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
+
+  	  <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
+    <span class="tok-p">}</span>
+      <span class="tok-n">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-p">}</span>
+
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Em seguida criamos a função <em>OnTrackbarCenter</em>, esta é responsável pelo ajuste da posição vertical
+do centro da região que entrará em foco.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-kt">void</span> <span class="tok-nf">on_trackbar_center</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-p">,</span> <span class="tok-kt">void</span><span class="tok-o">*</span><span class="tok-p">){</span>
+  <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">);</span>
+    <span class="tok-kt">int</span> <span class="tok-n">limit_v</span> <span class="tok-o">=</span> <span class="tok-n">vertical_slider</span><span class="tok-p">;</span>
+  <span class="tok-kt">int</span> <span class="tok-n">limit_c</span> <span class="tok-o">=</span> <span class="tok-n">center_slider</span><span class="tok-p">;</span>
+  <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_c</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-n">limit_v</span><span class="tok-o">&lt;=</span><span class="tok-n">height</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">)</span><span class="tok-o">&gt;=</span><span class="tok-mi">0</span><span class="tok-p">){</span>
+    <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&lt;=</span> <span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
+      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
+
+      <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
+
+    <span class="tok-p">}</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
+      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
+
+      <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
+    <span class="tok-p">}</span>
+    <span class="tok-n">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-p">}</span>
+
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Por último na função <em>main</em>, lemos a imagem original e aplicamos uma máscara gaussiana para desfocar
+a imagem original (filter2D) e a atribuímos na variável <em>desfocada</em>, esta é copiada para a variável
+<em>desfCpy</em> que também será usada no processo de regulagem da imagem de saída. Depois lemos a altura e
+largura da imagem, estes definiram os limites dos sliders <em>vertical</em> e <em>center</em>. Depois fazemos a saturação
+da imagem original e as chamadas <em>createTrackbar</em> para fazer os devidos ajustes.
+Finalizando o programa, a imagem produzida é salva no arquivo tiltshift_saida.png.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">argvc</span><span class="tok-p">,</span> <span class="tok-kt">char</span><span class="tok-o">**</span> <span class="tok-n">argv</span><span class="tok-p">){</span>
+  <span class="tok-n">Mat</span> <span class="tok-n">mask</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-n">CV_32F</span><span class="tok-p">),</span> <span class="tok-n">mask1</span><span class="tok-p">;</span>
+  <span class="tok-n">original</span> <span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s">&quot;tiltshift_entrada3.jpg&quot;</span><span class="tok-p">);</span>
+  <span class="tok-n">mask</span> <span class="tok-o">=</span> <span class="tok-n">Mat</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-p">,</span> <span class="tok-mi">3</span><span class="tok-p">,</span> <span class="tok-n">CV_32F</span><span class="tok-p">,</span> <span class="tok-n">gauss</span><span class="tok-p">);</span>
+  <span class="tok-n">scaleAdd</span><span class="tok-p">(</span><span class="tok-n">mask</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-o">/</span><span class="tok-mf">16.0</span><span class="tok-p">,</span> <span class="tok-n">Mat</span><span class="tok-o">::</span><span class="tok-n">zeros</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-n">CV_32F</span><span class="tok-p">),</span> <span class="tok-n">mask1</span><span class="tok-p">);</span>
+  <span class="tok-n">mask</span> <span class="tok-o">=</span> <span class="tok-n">mask1</span><span class="tok-p">;</span>
+  <span class="tok-n">filter2D</span><span class="tok-p">(</span><span class="tok-n">original</span><span class="tok-p">,</span> <span class="tok-n">desfocada</span><span class="tok-p">,</span> <span class="tok-n">original</span><span class="tok-p">.</span><span class="tok-n">depth</span><span class="tok-p">(),</span> <span class="tok-n">mask</span><span class="tok-p">,</span> <span class="tok-n">Point</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-mi">1</span><span class="tok-p">),</span> <span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-n">filter2D</span><span class="tok-p">(</span><span class="tok-n">desfocada</span><span class="tok-p">,</span> <span class="tok-n">desfocada</span><span class="tok-p">,</span> <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">depth</span><span class="tok-p">(),</span> <span class="tok-n">mask</span><span class="tok-p">,</span> <span class="tok-n">Point</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-mi">1</span><span class="tok-p">),</span> <span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-n">filter2D</span><span class="tok-p">(</span><span class="tok-n">desfocada</span><span class="tok-p">,</span> <span class="tok-n">desfocada</span><span class="tok-p">,</span> <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">depth</span><span class="tok-p">(),</span> <span class="tok-n">mask</span><span class="tok-p">,</span> <span class="tok-n">Point</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-mi">1</span><span class="tok-p">),</span> <span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">);</span>
+  <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">.</span><span class="tok-n">size</span><span class="tok-p">().</span><span class="tok-n">width</span><span class="tok-p">;</span>
+  <span class="tok-n">height</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">.</span><span class="tok-n">size</span><span class="tok-p">().</span><span class="tok-n">height</span><span class="tok-p">;</span>
+  <span class="tok-n">original</span> <span class="tok-o">=</span> <span class="tok-n">increase_colour_saturation</span><span class="tok-p">(</span><span class="tok-n">original</span><span class="tok-p">);</span>
+  <span class="tok-n">vertical_slider</span> <span class="tok-o">=</span> <span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">;</span>
+  <span class="tok-n">vertical_slider_max</span> <span class="tok-o">=</span> <span class="tok-n">height</span><span class="tok-p">;</span>
+  <span class="tok-n">center_slider</span> <span class="tok-o">=</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
+  <span class="tok-n">center_slider_max</span> <span class="tok-o">=</span> <span class="tok-n">height</span><span class="tok-p">;</span>
+  <span class="tok-n">namedWindow</span><span class="tok-p">(</span><span class="tok-s">&quot;addweighted&quot;</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-p">);</span>
+
+  <span class="tok-n">sprintf</span><span class="tok-p">(</span> <span class="tok-n">TrackbarName</span><span class="tok-p">,</span> <span class="tok-s">&quot;Alpha x %d&quot;</span><span class="tok-p">,</span> <span class="tok-n">alfa_slider_max</span> <span class="tok-p">);</span>
+  <span class="tok-n">createTrackbar</span><span class="tok-p">(</span> <span class="tok-n">TrackbarName</span><span class="tok-p">,</span> <span class="tok-s">&quot;addweighted&quot;</span><span class="tok-p">,</span>
+				  <span class="tok-o">&amp;</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span>
+				  <span class="tok-n">alfa_slider_max</span><span class="tok-p">,</span>
+				  <span class="tok-n">on_trackbar_blend</span> <span class="tok-p">);</span>
+  <span class="tok-n">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span> <span class="tok-mi">0</span> <span class="tok-p">);</span>
+
+  <span class="tok-n">sprintf</span><span class="tok-p">(</span> <span class="tok-n">TrackbarName</span><span class="tok-p">,</span> <span class="tok-s">&quot;DistCenter x %d&quot;</span><span class="tok-p">,</span> <span class="tok-n">center_slider_max</span> <span class="tok-p">);</span>
+  <span class="tok-n">createTrackbar</span><span class="tok-p">(</span> <span class="tok-n">TrackbarName</span><span class="tok-p">,</span> <span class="tok-s">&quot;addweighted&quot;</span><span class="tok-p">,</span>
+				  <span class="tok-o">&amp;</span><span class="tok-n">center_slider</span><span class="tok-p">,</span>
+				  <span class="tok-n">center_slider_max</span><span class="tok-p">,</span>
+				  <span class="tok-n">on_trackbar_center</span> <span class="tok-p">);</span>
+  <span class="tok-n">on_trackbar_center</span><span class="tok-p">(</span><span class="tok-n">center_slider</span><span class="tok-p">,</span> <span class="tok-mi">0</span> <span class="tok-p">);</span>
+
+  <span class="tok-n">sprintf</span><span class="tok-p">(</span> <span class="tok-n">TrackbarName</span><span class="tok-p">,</span> <span class="tok-s">&quot;VertPosi x %d&quot;</span><span class="tok-p">,</span> <span class="tok-n">vertical_slider_max</span> <span class="tok-p">);</span>
+  <span class="tok-n">createTrackbar</span><span class="tok-p">(</span> <span class="tok-n">TrackbarName</span><span class="tok-p">,</span> <span class="tok-s">&quot;addweighted&quot;</span><span class="tok-p">,</span>
+          <span class="tok-o">&amp;</span><span class="tok-n">vertical_slider</span><span class="tok-p">,</span>
+          <span class="tok-n">vertical_slider_max</span><span class="tok-p">,</span>
+          <span class="tok-n">on_trackbar_vert</span> <span class="tok-p">);</span>
+  <span class="tok-n">on_trackbar_vert</span><span class="tok-p">(</span><span class="tok-n">vertical_slider</span><span class="tok-p">,</span> <span class="tok-mi">0</span> <span class="tok-p">);</span>
+
+  <span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-n">imwrite</span><span class="tok-p">(</span><span class="tok-s">&quot;tiltshift_saida.png&quot;</span><span class="tok-p">,</span> <span class="tok-n">blended</span><span class="tok-p">);</span>
+  <span class="tok-k">return</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A seguir mostramos uma imagem de entrada e sua respectiva saída.</p>
+</div>
+<div id="fig_tiltshift1" class="imageblock">
+<div class="content">
+<img src="imagens/tiltshift_entrada3.jpg" alt="Entrada do programa tiltshift">
+</div>
+<div class="title">Figure 8. Entrada do programa tiltshift</div>
+</div>
+<div id="fig_tiltshift2" class="imageblock">
+<div class="content">
+<img src="imagens/tiltshift_saida2.png" alt="Saída do programa tiltshift">
+</div>
+<div class="title">Figure 9. Saída do programa tiltshift</div>
+</div>
+<div class="paragraph">
+<p>A seguir o código <em>tiltshift</em> completo:</p>
+</div>
 <div id="exa_tiltshift" class="listingblock">
 <div class="title">Listagem 7 : tiltshift.cpp</div>
 <div class="content">
@@ -1583,6 +1752,9 @@ a imagem é suavizada e com o laplassiano é destacado os contornos.</p>
 <h3 id="_1_9_questão_9">1.9 Questão 9</h3>
 <div class="paragraph">
 <p>Utilizando o código do <em>tiltshift.cpp</em> e com algumas adaptações foi possível aplicar o tiltshift em videos.</p>
+</div>
+<div class="paragraph">
+<p>A seguir o código completo.</p>
 </div>
 <div id="exa_tiltshiftvideo" class="listingblock">
 <div class="title">Listagem 8 : tiltshiftvideo.cpp</div>
@@ -1749,7 +1921,7 @@ a imagem é suavizada e com o laplassiano é destacado os contornos.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-21 12:56:20 BRT
+Last updated 2016-03-21 16:15:03 BRT
 </div>
 </div>
 <script type="text/x-mathjax-config">
