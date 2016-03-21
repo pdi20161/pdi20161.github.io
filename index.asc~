@@ -267,3 +267,15 @@ include::codigos/laplgauss.cpp[laplgauss.cpp]
 ----
 
 === 1.8 Questão 8
+
+=== 1.9 Questão 9
+Utilizando o código do _tiltshift.cpp_ e com algumas adaptações foi possível aplicar o tiltshift com videos.
+
+[[exa_tiltshiftvideo, Listagem 8]]
+
+[source,cpp]
+.Listagem 6 : tiltshiftvideo.cpp
+----
+include::codigos/tiltshiftvideo.cpp[tiltshiftvideo.cpp]
+----
+
