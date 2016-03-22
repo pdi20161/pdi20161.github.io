@@ -1486,36 +1486,28 @@ da imagem através do parâmetro alfa.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Em seguida criamos a função <em>OnTrackbarVert</em>, esta é responsável pelo ajuste da posição vertical
-do centro da região que entrará em foco.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-kt">void</span> <span class="tok-nf">on_trackbar_vert</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-p">,</span> <span class="tok-kt">void</span><span class="tok-o">*</span><span class="tok-p">){</span>
-  <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">);</span>
-<span class="tok-kt">int</span> <span class="tok-n">limit_v</span> <span class="tok-o">=</span> <span class="tok-n">vertical_slider</span><span class="tok-p">;</span>
-  <span class="tok-kt">int</span> <span class="tok-n">limit_c</span> <span class="tok-o">=</span> <span class="tok-n">center_slider</span><span class="tok-p">;</span>
-  <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-n">limit_v</span><span class="tok-o">&lt;=</span><span class="tok-n">height</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">)</span><span class="tok-o">&gt;=</span><span class="tok-mi">0</span><span class="tok-p">){</span>
-    <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&lt;=</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
-      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
-
-  	  <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
-
-    <span class="tok-p">}</span>
-    <span class="tok-k">else</span> <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
-      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
-
-  	  <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
-    <span class="tok-p">}</span>
-      <span class="tok-n">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">);</span>
-  <span class="tok-p">}</span>
-
-<span class="tok-p">}</span></code></pre>
-</div>
+<p>Em seguida criamos a função <em>OnTrackbarCenter</em>, esta é responsável pelo ajuste da altura da região
+central que entrará em foco. Os parâmetros <em>limitC</em> e <em>limitV</em> recebem, respectivamente, os valores
+do <em>centerSlider</em> (altura da região central de foco) e <em>verticalSlider</em> (posição vertical do centro
+da região de foco). Utilizamos duas travas que impedem que o programa pare de funcionar caso a região
+de foco ultrapasse os limites da imagem, elas estão localizadas no primeiro if, são elas:</p>
 </div>
 <div class="paragraph">
-<p>Em seguida criamos a função <em>OnTrackbarCenter</em>, esta é responsável pelo ajuste da altura da região
-central que entrará em foco.</p>
+<p>Trava superior: limit_c/2+limit_v&#8656;height<br>
+Trava inferior: (height-limit_c)/2-(height/2-limit_v)&gt;=0</p>
+</div>
+<div class="paragraph">
+<p>Utilizamos t  ambém as condições (limit_v &gt; 0 &amp;&amp; limit_c &gt; 0) para fazer com que os efeitos só aparecem
+se os sliders contiverem valores maiores que 0. Nós assumimos que o valor do slider da posição vertical,
+<em>verticalSlider</em>, começará com o valor da metade da altura da imagem. Sendo assim, caso o usuário coloque
+valores menores que a metade (limit_v &#8656;height/2), a região focal irá subir (-height/2-limit_v), caso seja
+valores maiores que a metade (limit_v &gt; height/2), a região focal irá descer (limit_v-height/2).
+A lógica que usamos para o <em>centerSlider</em> foi diferente: o slider inicia-se em 0 e para ambas as regiões
+(metade superior e inferior) usamos o cálculo (height-limit_c)/2 para deslocar o ponto inicial de foco
+(inicialmente localizada no centro) para cima com a metade do valor que escolhemos no slider, pois a outra
+metade do valor será referente ao aumento da região focal do centro para baixo. Todos esse cálculos são feitos
+utilizando o construtor e atribuindo à <em>tmp</em> e logo depois copiando para <em>desfCpy</em> para ser chamada a função
+on_trackbar_blend para ser calculada na imagem final.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1536,6 +1528,35 @@ central que entrará em foco.</p>
       <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
     <span class="tok-p">}</span>
     <span class="tok-n">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">);</span>
+  <span class="tok-p">}</span>
+
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Em seguida criamos a função <em>OnTrackbarVert</em>, esta é responsável pelo ajuste da posição vertical
+do centro da região que entrará em foco. Essa função faz exatamente os mesmos cálculos que o trecho
+anterior.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-kt">void</span> <span class="tok-nf">on_trackbar_vert</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-p">,</span> <span class="tok-kt">void</span><span class="tok-o">*</span><span class="tok-p">){</span>
+  <span class="tok-n">desfocada</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">);</span>
+<span class="tok-kt">int</span> <span class="tok-n">limit_v</span> <span class="tok-o">=</span> <span class="tok-n">vertical_slider</span><span class="tok-p">;</span>
+  <span class="tok-kt">int</span> <span class="tok-n">limit_c</span> <span class="tok-o">=</span> <span class="tok-n">center_slider</span><span class="tok-p">;</span>
+  <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-n">limit_c</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-n">limit_v</span><span class="tok-o">&lt;=</span><span class="tok-n">height</span> <span class="tok-o">&amp;&amp;</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">)</span><span class="tok-o">&gt;=</span><span class="tok-mi">0</span><span class="tok-p">){</span>
+    <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&lt;=</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
+      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
+
+  	  <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">-</span><span class="tok-n">limit_v</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
+
+    <span class="tok-p">}</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span><span class="tok-p">(</span><span class="tok-n">limit_v</span> <span class="tok-o">&gt;</span> <span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">){</span>
+      <span class="tok-n">Mat</span> <span class="tok-n">tmp</span> <span class="tok-o">=</span> <span class="tok-n">original</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">));</span>
+
+  	  <span class="tok-n">tmp</span><span class="tok-p">.</span><span class="tok-n">copyTo</span><span class="tok-p">(</span><span class="tok-n">desf_cpy</span><span class="tok-p">(</span><span class="tok-n">Rect</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-n">limit_c</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">limit_v</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">),</span><span class="tok-n">width</span><span class="tok-p">,</span><span class="tok-n">limit_c</span><span class="tok-p">)));</span>
+    <span class="tok-p">}</span>
+      <span class="tok-n">on_trackbar_blend</span><span class="tok-p">(</span><span class="tok-n">alfa_slider</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">);</span>
   <span class="tok-p">}</span>
 
 <span class="tok-p">}</span></code></pre>
@@ -1974,7 +1995,7 @@ Your browser does not support the video tag.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-21 17:42:53 BRT
+Last updated 2016-03-21 21:19:26 BRT
 </div>
 </div>
 <script type="text/x-mathjax-config">
