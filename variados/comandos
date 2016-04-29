@@ -1,4 +1,5 @@
 sudo apt-get install git
+sudo apt-get install g++ libopencv-dev
 
 git config --global user.name "pdi20161"
 git config --global user.email pdi2016.1@gmail.com

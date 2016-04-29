@@ -22,7 +22,7 @@ int main(int argc, char** argv){
   vector<int> yrange;
   vector<int> xrange;
   Mat mask(3,3,CV_32F), mask1;
-  
+
   Mat image, frame, points, blur, border;
 
   int width, height, gray;
@@ -37,20 +37,17 @@ int main(int argc, char** argv){
   filter2D(blur, blur, blur.depth(), mask, Point(1,1), 0);
   filter2D(blur, blur, blur.depth(), mask, Point(1,1), 0);
   filter2D(blur, blur, blur.depth(), mask, Point(1,1), 0);
-  
- 
 
   srand(time(0));
 
   if(!image.data){
-	cout << "nao abriu" << argv[1] << endl;
+	  cout << "nao abriu" << argv[1] << endl;
     cout << argv[0] << " imagem.jpg";
     exit(0);
   }
 
   width=image.size().width;
   height=image.size().height;
-
   xrange.resize(height/STEP);
   yrange.resize(width/STEP);
 
@@ -63,8 +60,6 @@ int main(int argc, char** argv){
   }
 
   blur.copyTo(points);
-  imshow("borrado",points);
-  waitKey();
   random_shuffle(xrange.begin(), xrange.end());
 
   for(auto i : xrange){
@@ -76,13 +71,10 @@ int main(int argc, char** argv){
       circle(points,cv::Point(y,x),5,CV_RGB(gray,gray,gray),-1,CV_AA);
     }
   }
-  imshow("pontos1",points);
+
   waitKey();
-  //points = Mat(height, width, CV_8U, Scalar(255));
   for(int h=1;h<=4;h++){
-  Canny(image, border, 10*h, 150*h);
-    imshow("canny",border);
-    waitKey();
+  Canny(image, border, 50*h, 150*h);
      for(int i=0; i<height; i++ ){
         for(int j=0; j<width; j++){
      	   if(border.at<uchar>(i,j)>0){
@@ -90,12 +82,12 @@ int main(int argc, char** argv){
      	      circle(points, cv::Point(j,i),5-h,CV_RGB(gray,gray,gray),-1,CV_AA);
      	   }
         }
-     }imshow("pontos2",points);
-  waitKey();
+     }
   }
-  imshow("pontos2",points);
+
+  imshow("saida_canny_pont",points);
   waitKey();
-  
-  imwrite("pontos.jpg", points);
+
+  imwrite("saida_canny_pont.jpg", points);
   return 0;
 }
