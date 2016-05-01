@@ -11,36 +11,36 @@ using namespace std;
 
 double gama_h;
 int gama_h_slider = 0;
-int gama_h_slider_max = 100;
+int gama_h_slider_max = 10;
 
 double gama_l;
 int gama_l_slider = 0;
-int gama_l_slider_max = 100;
+int gama_l_slider_max = 10;
 
 double c;
 int c_slider = 0;
-int c_slider_max = 100;
+int c_slider_max = 10;
 
 double d0;
 int d0_slider = 0;
-int d0_slider_max = 100;
+int d0_slider_max = 10;
 
 char TrackbarName[50];
 
 void on_trackbar_gama_h(int, void*){
- gama_h = (double) gama_h_slider ;
+ gama_h = (double) gama_h_slider/gama_h_slider_max ;
 }
 
 void on_trackbar_gama_l(int, void*){
- gama_l = (double) gama_l_slider  ;
+ gama_l = (double) gama_l_slider/gama_l_slider_max ;
 }
 
 void on_trackbar_c(int, void*){
- c = (double) c_slider  ;
+ c = (double) c_slider/c_slider_max ;
 }
 
 void on_trackbar_d0(int, void*){
- d0 = (double) d0_slider ;
+ d0 = (double) d0_slider/d0_slider_max ;
 }
 
 Mat filterHomomorfico( int M, int N){
@@ -124,14 +124,14 @@ int main(int , char**){
   int dft_M, dft_N;
 
   // abre a câmera default
-  //cap.open(0);
-  //if(!cap.isOpened())
-   // return -1;
+  cap.open(0);
+  if(!cap.isOpened())
+    return -1;
 
   // captura uma imagem para recuperar as
   // informacoes de gravação
-  //cap >> image;
-  image = imread("iron.png");
+  cap >> image;
+
   // identifica os tamanhos otimos para
   // calculo do FFT
   dft_M = getOptimalDFTSize(image.rows);
@@ -163,8 +163,7 @@ int main(int , char**){
   merge(comps, 2, filter);
 
   for(;;){
-    //cap >> image;
-    image = imread("iron.png");
+    cap >> image;
     cvtColor(image, imagegray, CV_BGR2GRAY);
     imshow("original", imagegray);
 
