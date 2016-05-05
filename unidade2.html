@@ -503,13 +503,52 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_1_1_questão_1">1.1 Questão 1</h3>
 <div class="paragraph">
+<p>Nessa questão foi reproduzido a equação do filtro homomófico mostrado abaixo:</p>
+</div>
+<div class="paragraph">
 <p>\$H(u,v) = (\gamma h - \gamma l)(1 - e^(-c((D^2 (u,v) )/(D^2 0)))) + \gamma l\$</p>
+</div>
+<div class="paragraph">
+<p>A seguir a implementação dessa equação em C++;</p>
+</div>
+<div class="listingblock">
+<div class="title">filtro_homomorfico_parte1.cpp</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span class="tok-n">Mat</span> <span class="tok-nf">filterHomomorfico</span><span class="tok-p">(</span> <span class="tok-kt">int</span> <span class="tok-n">M</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">N</span><span class="tok-p">){</span>
+  <span class="tok-n">Mat</span> <span class="tok-n">H</span> <span class="tok-o">=</span> <span class="tok-n">Mat</span><span class="tok-p">(</span><span class="tok-n">M</span><span class="tok-p">,</span> <span class="tok-n">N</span><span class="tok-p">,</span> <span class="tok-n">CV_32F</span><span class="tok-p">),</span> <span class="tok-n">filter</span><span class="tok-p">;</span>
+		<span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">i</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span> <span class="tok-n">i</span><span class="tok-o">&lt;</span><span class="tok-n">M</span> <span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">++</span><span class="tok-p">){</span>
+			<span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">j</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span> <span class="tok-n">j</span><span class="tok-o">&lt;</span><span class="tok-n">N</span> <span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">++</span><span class="tok-p">){</span>
+					<span class="tok-kt">float</span> <span class="tok-n">D2</span> <span class="tok-o">=</span> <span class="tok-n">pow</span><span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">i</span><span class="tok-o">-</span><span class="tok-n">M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">pow</span><span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">j</span><span class="tok-o">-</span><span class="tok-n">N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">);</span>
+					<span class="tok-n">H</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-kt">float</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">)</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-n">gama_h</span><span class="tok-o">-</span><span class="tok-n">gama_l</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-mf">1.0</span><span class="tok-o">-</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mf">1.0</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">c</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">D2</span><span class="tok-o">/</span><span class="tok-n">pow</span><span class="tok-p">(</span><span class="tok-n">d0</span><span class="tok-p">,</span><span class="tok-mi">2</span><span class="tok-p">))))</span><span class="tok-o">+</span> <span class="tok-n">gama_l</span><span class="tok-p">;</span>
+			<span class="tok-p">}</span>
+		<span class="tok-p">}</span>
+		<span class="tok-n">Mat</span> <span class="tok-n">comps</span><span class="tok-p">[]</span><span class="tok-o">=</span> <span class="tok-p">{</span><span class="tok-n">H</span><span class="tok-p">,</span> <span class="tok-n">H</span><span class="tok-p">};</span>
+		<span class="tok-n">merge</span><span class="tok-p">(</span><span class="tok-n">comps</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">,</span> <span class="tok-n">filter</span><span class="tok-p">);</span>
+		<span class="tok-k">return</span> <span class="tok-n">filter</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Utilizando os parametros
+\$\gamma h = 68, \gamma l = 7, C = 76 e D0 = 30\$
+Na imagem a seguir:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/filtro_homomorfico_entrada.png" alt="Entrada do programa filtro_homomofico">
+</div>
+<div class="title">Figure 1. Entrada do programa filtro_homomofico</div>
+</div>
+<div class="paragraph">
+<p>obtemos o seguinte resultado
+.Saida do programa filtro_homomofico.cpp
+image::imagens/filtro_homomorfico_saida.png[Saida do programa filtro_homomofico, title="Saída do programa filtro_homomofico"]</p>
 </div>
 <div class="paragraph">
 <p>A seguir o código completo:</p>
 </div>
 <div class="listingblock">
-<div class="title">filtro_homomofico.cpp</div>
+<div class="title">filtro_homomorfico.cpp</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span class="tok-cp">#include &lt;iostream&gt;</span>
 <span class="tok-cp">#include &lt;opencv2/opencv.hpp&gt;</span>
@@ -557,16 +596,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span class="tok-p">}</span>
 
 <span class="tok-n">Mat</span> <span class="tok-nf">filterHomomorfico</span><span class="tok-p">(</span> <span class="tok-kt">int</span> <span class="tok-n">M</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">N</span><span class="tok-p">){</span>
-  <span class="tok-n">Mat</span> <span class="tok-n">H</span> <span class="tok-o">=</span> <span class="tok-n">Mat</span><span class="tok-p">(</span><span class="tok-n">M</span><span class="tok-p">,</span> <span class="tok-n">N</span><span class="tok-p">,</span> <span class="tok-n">CV_32F</span><span class="tok-p">),</span> <span class="tok-n">filter</span><span class="tok-p">;</span>
-		<span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">i</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span> <span class="tok-n">i</span><span class="tok-o">&lt;</span><span class="tok-n">M</span> <span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">++</span><span class="tok-p">){</span>
-			<span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">j</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span> <span class="tok-n">j</span><span class="tok-o">&lt;</span><span class="tok-n">N</span> <span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">++</span><span class="tok-p">){</span>
-					<span class="tok-kt">float</span> <span class="tok-n">D2</span> <span class="tok-o">=</span> <span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">i</span><span class="tok-o">-</span><span class="tok-n">M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">i</span><span class="tok-o">-</span><span class="tok-n">M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">j</span><span class="tok-o">-</span><span class="tok-n">N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">j</span><span class="tok-o">-</span><span class="tok-n">N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">);</span>
-					<span class="tok-n">H</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-kt">float</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">)</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-n">gama_h</span><span class="tok-o">-</span><span class="tok-n">gama_l</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-mf">1.0</span><span class="tok-o">-</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mf">1.0</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">c</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">D2</span><span class="tok-o">/</span><span class="tok-p">(</span><span class="tok-n">d0</span><span class="tok-o">*</span><span class="tok-n">d0</span><span class="tok-p">))))</span><span class="tok-o">+</span> <span class="tok-n">gama_l</span><span class="tok-p">;</span>
-			<span class="tok-p">}</span>
+ 	<span class="tok-n">Mat</span> <span class="tok-n">H</span> <span class="tok-o">=</span> <span class="tok-n">Mat</span><span class="tok-p">(</span><span class="tok-n">M</span><span class="tok-p">,</span> <span class="tok-n">N</span><span class="tok-p">,</span> <span class="tok-n">CV_32F</span><span class="tok-p">),</span> <span class="tok-n">filter</span><span class="tok-p">;</span>
+	<span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">i</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span> <span class="tok-n">i</span><span class="tok-o">&lt;</span><span class="tok-n">M</span> <span class="tok-p">;</span><span class="tok-n">i</span><span class="tok-o">++</span><span class="tok-p">){</span>
+		<span class="tok-k">for</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">j</span><span class="tok-o">=</span><span class="tok-mi">0</span><span class="tok-p">;</span> <span class="tok-n">j</span><span class="tok-o">&lt;</span><span class="tok-n">N</span> <span class="tok-p">;</span><span class="tok-n">j</span><span class="tok-o">++</span><span class="tok-p">){</span>
+			<span class="tok-kt">float</span> <span class="tok-n">D2</span> <span class="tok-o">=</span> <span class="tok-n">pow</span><span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">i</span><span class="tok-o">-</span><span class="tok-n">M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">pow</span><span class="tok-p">((</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">j</span><span class="tok-o">-</span><span class="tok-n">N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">);</span>
+			<span class="tok-n">H</span><span class="tok-p">.</span><span class="tok-n">at</span><span class="tok-o">&lt;</span><span class="tok-kt">float</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-n">j</span><span class="tok-p">)</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-n">gama_h</span><span class="tok-o">-</span><span class="tok-n">gama_l</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-mf">1.0</span><span class="tok-o">-</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mf">1.0</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-kt">float</span><span class="tok-p">)</span><span class="tok-n">c</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">D2</span><span class="tok-o">/</span><span class="tok-n">pow</span><span class="tok-p">(</span><span class="tok-n">d0</span><span class="tok-p">,</span><span class="tok-mi">2</span><span class="tok-p">))))</span><span class="tok-o">+</span> <span class="tok-n">gama_l</span><span class="tok-p">;</span>
 		<span class="tok-p">}</span>
-		<span class="tok-n">Mat</span> <span class="tok-n">comps</span><span class="tok-p">[]</span><span class="tok-o">=</span> <span class="tok-p">{</span><span class="tok-n">H</span><span class="tok-p">,</span> <span class="tok-n">H</span><span class="tok-p">};</span>
-		<span class="tok-n">merge</span><span class="tok-p">(</span><span class="tok-n">comps</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">,</span> <span class="tok-n">filter</span><span class="tok-p">);</span>
-		<span class="tok-k">return</span> <span class="tok-n">filter</span><span class="tok-p">;</span>
+	<span class="tok-p">}</span>
+	<span class="tok-n">Mat</span> <span class="tok-n">comps</span><span class="tok-p">[]</span><span class="tok-o">=</span> <span class="tok-p">{</span><span class="tok-n">H</span><span class="tok-p">,</span> <span class="tok-n">H</span><span class="tok-p">};</span>
+	<span class="tok-n">merge</span><span class="tok-p">(</span><span class="tok-n">comps</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">,</span> <span class="tok-n">filter</span><span class="tok-p">);</span>
+	<span class="tok-k">return</span> <span class="tok-n">filter</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
 
 <span class="tok-c1">// troca os quadrantes da imagem da DFT</span>
@@ -644,7 +683,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   <span class="tok-c1">// captura uma imagem para recuperar as</span>
   <span class="tok-c1">// informacoes de gravação</span>
   <span class="tok-c1">//cap &gt;&gt; image;</span>
-  <span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s">&quot;iron.png&quot;</span><span class="tok-p">);</span>
+  <span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s">&quot;filtro_homomofico_entrada.jpg&quot;</span><span class="tok-p">);</span>
   <span class="tok-c1">// identifica os tamanhos otimos para</span>
   <span class="tok-c1">// calculo do FFT</span>
   <span class="tok-n">dft_M</span> <span class="tok-o">=</span> <span class="tok-n">getOptimalDFTSize</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-n">rows</span><span class="tok-p">);</span>
@@ -677,7 +716,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
   <span class="tok-k">for</span><span class="tok-p">(;;){</span>
     <span class="tok-c1">//cap &gt;&gt; image;</span>
-    <span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s">&quot;iron.png&quot;</span><span class="tok-p">);</span>
+    <span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s">&quot;filtro_homomofico_entrada.jpg&quot;</span><span class="tok-p">);</span>
     <span class="tok-n">cvtColor</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,</span> <span class="tok-n">imagegray</span><span class="tok-p">,</span> <span class="tok-n">CV_BGR2GRAY</span><span class="tok-p">);</span>
     <span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s">&quot;original&quot;</span><span class="tok-p">,</span> <span class="tok-n">imagegray</span><span class="tok-p">);</span>
 
@@ -706,7 +745,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     <span class="tok-c1">// realiza a troca de quadrantes</span>
     <span class="tok-n">deslocaDFT</span><span class="tok-p">(</span><span class="tok-n">complexImage</span><span class="tok-p">);</span>
 
-		<span class="tok-n">filter</span> <span class="tok-o">=</span> <span class="tok-n">filterHomomorfico</span><span class="tok-p">(</span><span class="tok-n">dft_M</span><span class="tok-p">,</span><span class="tok-n">dft_N</span><span class="tok-p">);</span>
+    <span class="tok-n">filter</span> <span class="tok-o">=</span> <span class="tok-n">filterHomomorfico</span><span class="tok-p">(</span><span class="tok-n">dft_M</span><span class="tok-p">,</span><span class="tok-n">dft_N</span><span class="tok-p">);</span>
 
     <span class="tok-c1">//cout &lt;&lt; &quot;H: &quot;&lt;&lt; H &lt;&lt; &quot;\n&quot;;</span>
 
@@ -828,7 +867,7 @@ No final, teremos o resultado do pontilhismo na variável <em>point</em>.</p>
 <div class="content">
 <img src="imagens/entrada_canny_pont.bmp" alt="Entrada do programa canny_pont">
 </div>
-<div class="title">Figure 1. Entrada do programa canny_pont</div>
+<div class="title">Figure 2. Entrada do programa canny_pont</div>
 </div>
 <div class="paragraph">
 <p>Temos a seguinte saída:</p>
@@ -837,7 +876,7 @@ No final, teremos o resultado do pontilhismo na variável <em>point</em>.</p>
 <div class="content">
 <img src="imagens/saida_canny_pont.jpg" alt="Saida do programa canny_pont">
 </div>
-<div class="title">Figure 2. Saída do programa canny_pont</div>
+<div class="title">Figure 3. Saída do programa canny_pont</div>
 </div>
 <div class="paragraph">
 <p>A seguir o código completo:</p>
@@ -946,7 +985,7 @@ No final, teremos o resultado do pontilhismo na variável <em>point</em>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-29 20:37:52 BRT
+Last updated 2016-05-05 17:17:35 BRT
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -14,9 +14,9 @@ stem:[H(u,v) = (\gamma h - \gamma l)(1 - e^(-c((D^2 (u,v) )/(D^2 0)))) + \gamma 
 A seguir a implementação dessa equação em C++;
 
 [source,cpp]
-.filtro_homomorfico_parte1.cpp
+.filtro_homomofico_parte1.cpp
 ----
-include::codigos/filtro_homomorfico_parte1.cpp[filtro_homomorfico_parte1.cpp]
+include::codigos/filtro_homomofico_parte1.cpp[filtro_homomofico_parte1.cpp]
 ----
 
 Utilizando os parametros
@@ -35,9 +35,9 @@ image::imagens/filtro_homomorfico_saida.png[Saida do programa filtro_homomofico,
 A seguir o código completo:
 
 [source,cpp]
-.filtro_homomorfico.cpp
+.filtro_homomofico.cpp
 ----
-include::codigos/filtro_homomorfico.cpp[filtro_homomorfico.cpp]
+include::codigos/filtro_homomofico.cpp[filtro_homomofico.cpp]
 ----
 
 === 1.1 Questão 2
