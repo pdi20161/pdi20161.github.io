@@ -47,8 +47,8 @@ Mat filterHomomorfico( int M, int N){
   Mat H = Mat(M, N, CV_32F), filter;
 		for(int i=0; i<M ;i++){
 			for(int j=0; j<N ;j++){
-					float D2 = ((float)i-M/2.0)*((float)i-M/2.0) + ((float)j-N/2.0)*((float)j-N/2.0);
-					H.at<float>(i,j) = (gama_h-gama_l)*(1.0-exp(-1.0*(float)c*(D2/(d0*d0))))+ gama_l;
+					float D2 = pow((float)i-M/2.0, 2) + pow((float)j-N/2.0, 2);
+					H.at<float>(i,j) = (gama_h-gama_l)*(1.0-exp(-1.0*(float)c*(D2/pow(d0,2))))+ gama_l;
 			}
 		}
 		Mat comps[]= {H, H};
@@ -131,7 +131,7 @@ int main(int , char**){
   // captura uma imagem para recuperar as
   // informacoes de gravação
   //cap >> image;
-  image = imread("iron.png");
+  image = imread("filtro_homomofico_entrada.jpg");
   // identifica os tamanhos otimos para
   // calculo do FFT
   dft_M = getOptimalDFTSize(image.rows);
@@ -164,7 +164,7 @@ int main(int , char**){
 
   for(;;){
     //cap >> image;
-    image = imread("iron.png");
+    image = imread("filtro_homomofico_entrada.jpg");
     cvtColor(image, imagegray, CV_BGR2GRAY);
     imshow("original", imagegray);
 
