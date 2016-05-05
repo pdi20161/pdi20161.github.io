@@ -131,7 +131,7 @@ int main(int , char**){
   // captura uma imagem para recuperar as
   // informacoes de gravação
   //cap >> image;
-  image = imread("filtro_homomofico_entrada.jpg");
+  image = imread("/imagens/filtro_homomofico_entrada.jpg");
   // identifica os tamanhos otimos para
   // calculo do FFT
   dft_M = getOptimalDFTSize(image.rows);
@@ -164,7 +164,7 @@ int main(int , char**){
 
   for(;;){
     //cap >> image;
-    image = imread("filtro_homomofico_entrada.jpg");
+    image = imread("/imagens/filtro_homomofico_entrada.jpg");
     cvtColor(image, imagegray, CV_BGR2GRAY);
     imshow("original", imagegray);
 
