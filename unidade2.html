@@ -548,9 +548,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="imagens/filtro_homomorfico_saida.png" alt="Saída do programa filtro_homomofico">
+<img src="imagens/filtro_homomorfico_saida.png" alt="Saída do programa filtro_homomofico sem logaritmo e exponêncial">
 </div>
-<div class="title">Figure 2. Saída do programa filtro_homomofico</div>
+<div class="title">Figure 2. Saída do programa filtro_homomofico sem logaritmo e exponêncial</div>
+</div>
+<div class="paragraph">
+<p>Neste outro caso, fazendo o logarítmo da imagem antes da dft:<br>
+add(complexImage, 1.0, complexImage);<br>
+log(complexImage,complexImage);</p>
+</div>
+<div class="paragraph">
+<p>E fazendo a normalização e exponcencial da imagem depois da idft:<br>
+normalize(complexImage, complexImage, 0, 1, CV_MINMAX);<br>
+exp(complexImage,complexImage);</p>
+</div>
+<div class="paragraph">
+<p>Utilizando os mesmos parâmetros do caso anterior, teremos a seguinte saída:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/filtro_homomorfico_log_exp.png" alt="Saída do programa filtro_homomofico com logaritmo e exponêncial">
+</div>
+<div class="title">Figure 3. Saída do programa filtro_homomofico com logaritmo e exponêncial</div>
 </div>
 <div class="paragraph">
 <p>A seguir o código completo:</p>
@@ -747,6 +766,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     <span class="tok-c1">// componente complexa</span>
     <span class="tok-n">merge</span><span class="tok-p">(</span><span class="tok-n">planos</span><span class="tok-p">,</span> <span class="tok-n">complexImage</span><span class="tok-p">);</span>
 
+    <span class="tok-c1">//add(complexImage, 1.0, complexImage);</span>
+    <span class="tok-c1">//log(complexImage,complexImage);</span>
+
     <span class="tok-c1">// calcula o dft</span>
     <span class="tok-n">dft</span><span class="tok-p">(</span><span class="tok-n">complexImage</span><span class="tok-p">,</span> <span class="tok-n">complexImage</span><span class="tok-p">);</span>
 
@@ -774,6 +796,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     <span class="tok-c1">// calcula a DFT inversa</span>
     <span class="tok-n">idft</span><span class="tok-p">(</span><span class="tok-n">complexImage</span><span class="tok-p">,</span> <span class="tok-n">complexImage</span><span class="tok-p">);</span>
 
+    <span class="tok-c1">//normalize(complexImage, complexImage, 0, 1, CV_MINMAX);</span>
+    <span class="tok-c1">//exp(complexImage,complexImage);</span>
+
     <span class="tok-c1">// limpa o array de planos</span>
     <span class="tok-n">planos</span><span class="tok-p">.</span><span class="tok-n">clear</span><span class="tok-p">();</span>
 
@@ -783,6 +808,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
     <span class="tok-c1">// normaliza a parte real para exibicao</span>
     <span class="tok-n">normalize</span><span class="tok-p">(</span><span class="tok-n">planos</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">],</span> <span class="tok-n">planos</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">],</span> <span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">CV_MINMAX</span><span class="tok-p">);</span>
+
     <span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s">&quot;filtrada&quot;</span><span class="tok-p">,</span> <span class="tok-n">planos</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]);</span>
 
     <span class="tok-n">key</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-kt">char</span><span class="tok-p">)</span> <span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">10</span><span class="tok-p">);</span>
@@ -875,7 +901,7 @@ No final, teremos o resultado do pontilhismo na variável <em>point</em>.</p>
 <div class="content">
 <img src="imagens/entrada_canny_pont.bmp" alt="Entrada do programa canny_pont">
 </div>
-<div class="title">Figure 3. Entrada do programa canny_pont</div>
+<div class="title">Figure 4. Entrada do programa canny_pont</div>
 </div>
 <div class="paragraph">
 <p>Temos a seguinte saída:</p>
@@ -884,7 +910,7 @@ No final, teremos o resultado do pontilhismo na variável <em>point</em>.</p>
 <div class="content">
 <img src="imagens/saida_canny_pont.jpg" alt="Saida do programa canny_pont">
 </div>
-<div class="title">Figure 4. Saída do programa canny_pont</div>
+<div class="title">Figure 5. Saída do programa canny_pont</div>
 </div>
 <div class="paragraph">
 <p>A seguir o código completo:</p>
@@ -993,7 +1019,7 @@ No final, teremos o resultado do pontilhismo na variável <em>point</em>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-05 17:24:33 BRT
+Last updated 2016-05-11 13:27:31 BRT
 </div>
 </div>
 <script type="text/x-mathjax-config">

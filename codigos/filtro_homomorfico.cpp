@@ -131,7 +131,7 @@ int main(int , char**){
   // captura uma imagem para recuperar as
   // informacoes de gravação
   //cap >> image;
-  image = imread("/imagens/filtro_homomofico_entrada.jpg");
+  image = imread("filtro_homomofico_entrada.jpg");
   // identifica os tamanhos otimos para
   // calculo do FFT
   dft_M = getOptimalDFTSize(image.rows);
@@ -164,7 +164,7 @@ int main(int , char**){
 
   for(;;){
     //cap >> image;
-    image = imread("/imagens/filtro_homomofico_entrada.jpg");
+    image = imread("filtro_homomofico_entrada.jpg");
     cvtColor(image, imagegray, CV_BGR2GRAY);
     imshow("original", imagegray);
 
@@ -187,12 +187,15 @@ int main(int , char**){
     // componente complexa
     merge(planos, complexImage);
 
+    //add(complexImage, 1.0, complexImage);
+    //log(complexImage,complexImage);
+
     // calcula o dft
     dft(complexImage, complexImage);
 
     // realiza a troca de quadrantes
     deslocaDFT(complexImage);
-    
+
     filter = filterHomomorfico(dft_M,dft_N);
 
     //cout << "H: "<< H << "\n";
@@ -214,6 +217,9 @@ int main(int , char**){
     // calcula a DFT inversa
     idft(complexImage, complexImage);
 
+    //normalize(complexImage, complexImage, 0, 1, CV_MINMAX);
+    //exp(complexImage,complexImage);
+
     // limpa o array de planos
     planos.clear();
 
@@ -223,6 +229,7 @@ int main(int , char**){
 
     // normaliza a parte real para exibicao
     normalize(planos[0], planos[0], 0, 1, CV_MINMAX);
+
     imshow("filtrada", planos[0]);
 
     key = (char) waitKey(10);
